@@ -1,0 +1,56 @@
+version: "3.8"
+services:
+
+    # MySQL database service
+    db:
+        image: mysql:8.0
+        container_name: mysql-db
+        ports:
+            - "3306:3306"       #네트워크 접속할때 사용할번호 : 내부에서 사용할 번호
+        volumes:
+          - db-data:/var/lib/mysql      # 볼륨설정을 하지않으면 초기화가 되기 때문.... 저장할곳 명시
+          - ./config/database/init/:/docker-entrypoint-initdb.d
+        command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+        environment:
+          - MYSQL_ROOT_PASSWORD=!sample1234!@
+          - MYSQL_DATABASE=LOCAL_DB
+          - MYSQL_USER=user
+          - MYSQL_PASSWORD=!user1234!@
+        networks:
+            - php-network
+    # PHP service
+    php:
+        build:
+          context:  ./config
+          dockerfile: Dockerfile
+        container_name: php
+        working_dir: /game/www/standard-project  #여기로 명령이 된다고..??
+        depends_on:
+          - db
+        volumes:
+          - ./:/game/www/standard-project
+          - ./config/logs:/game/log
+        networks:
+          - php-network
+    # Nginx service
+    nginx:
+        image: nginx:alpine
+        container_name: php-nginx
+        depends_on:
+          - php
+        ports:
+          - 80:80
+        volumes:
+          - ./config/nginx/:/etc/nginx/conf.d
+          - ./:/game/www/standard-project       #경로를 설치한경로??와 일치되게 해주라...
+          - ./config/logs:/game/log
+        networks:
+            - php-network
+
+networks:
+    php-network:
+        driver: bridge   #같은 네트워크로 묶겠다.
+volumes:
+  db-data:
+
+#콘테이너명으로 접속? 
