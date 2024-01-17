@@ -112,3 +112,5 @@ class Model_users extends MY_Model
 }
 
 #직접적인 쿼리문
+#https://ciboard.co.kr/user_guide/kr/database/examples.html
+#쿼리문에 대한 자세한 내용은 위의 사이트에서 확인이 가능하다

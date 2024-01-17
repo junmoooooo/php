@@ -9,18 +9,18 @@ class Characters extends API_Controller
 		$this->load->model( 'Model_characters' );     # 데이터베이스? class명을 명시
 	}
 
-	public function patchUserName_patch( $userNo )			#파라미터가 들어가는 순서도 중요함!
+	public function patchChName_patch( $chNo )			#파라미터가 들어가는 순서도 중요함!
 	{
 		$this->data_validation->clear();
 
 		$req_param = [
-			'user_no'	=> $userNo,
-			'name'  => $this->patch('name'),
+			'ch_no'	=> $chNo,
+			'ch_nickname'  => $this->patch('ch_nickname'),
 		];
 
 		// 필수 항목    보안적으로...
-		$this->data_validation->set_rules( 'name', '', 'trim|xss_clean|required' );
-		$this->data_validation->set_rules( 'user_no', '', 'trim|xss_clean|numeric|required' );
+		$this->data_validation->set_rules( 'ch_nickname', '', 'trim|xss_clean|required' );
+		$this->data_validation->set_rules( 'ch_no', '', 'trim|xss_clean|numeric|required' );
 		
 		try
 		{
@@ -32,9 +32,9 @@ class Characters extends API_Controller
 
 			#유저가 있는지 없는지 확인하는거 넣어주자
 			
-			if( $this->Model_users->select_user( [ $req_param['user_no']] ) )
+			if( $this->Model_characters->select_ch( [ $req_param['ch_no']] ) )
 			{
-				$this->Model_users->update_user($req_param['user_no'], $req_param['name']);
+				$this->Model_characters->update_ch($req_param['ch_no'], $req_param['ch_nickname']);
 			
 			// 응답 코드 작성
 				$response = [
@@ -151,16 +151,16 @@ class Characters extends API_Controller
 
 	//var_dumps()
 
-	public function deleteUser_delete( $userNo )   
+	public function deleteCh_delete( $chNo )   
 	{
 		$this->data_validation->clear();
 
 		$req_param = [
-			'user_no' => $userNo,
+			'ch_no' => $chNo,
 		];
 
 		// 필수 항목    보안적으로...
-		$this->data_validation->set_rules( 'user_no', '', 'trim|xss_clean|numeric|required' );
+		$this->data_validation->set_rules( 'ch_no', '', 'trim|xss_clean|numeric|required' );
 		
 		try
 		{
@@ -168,13 +168,13 @@ class Characters extends API_Controller
 			$req_param = $this->data_validation->validate( $req_param );
 
 			// 모델을이용한 유저정보 삭제
-			$this->Model_users->delete_user( $req_param['user_no'] );
+			$this->Model_characters->delete_ch( $req_param['ch_no'] );
 
 			// 응답 코드 작성
 			$response = [
 				'code'     => SUCCESS,
 				'message'  => 'SUCCESS' ,
-				'response' => ['user_no' => $userNo],
+				'response' => ['ch_no' => $chNo],
 				'request'  => $req_param,
 			];
 		}

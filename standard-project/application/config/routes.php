@@ -62,7 +62,8 @@ $route['users/(:num)']['DELETE']                        = 'users/deleteUser/$1';
 
 $route['characters/(:num)']['GET']                           = 'characters/findChNo/$1';    
 $route['characters']['POST']                                 = 'characters/insertCharacter';
-
+$route['characters/(:num)/name']['PATCH']                    = 'characters/patchChName/$1';
+$route['characters/(:num)']['DELETE']                        = 'characters/deleteCh/$1';
 
 // uri는 어떻게 받겠다라는걸 지정해줌
 // PATCH 파라미터로 'users/patchUserName/$1/$2' 클래스 public function patchUserName_patch($userNo, $userName) 순서대로 들어감

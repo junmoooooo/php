@@ -57,6 +57,7 @@ class Model_characters extends MY_Model
 		}
 	}
 
+
 	public function insert_ch( $data )
 	{
 		$insert_data = [
@@ -72,13 +73,16 @@ class Model_characters extends MY_Model
 		return $this->mdb->insert_id();
 	}
 
-	public function update_user( int $userNo, string $userName ): bool
+
+
+
+	public function update_ch( int $ch_no, string $chname ): bool
 	{
 		$update_data = [
-			'name' => $userName
+			'ch_nickname' => $chname
 		];
 		# 키는 항상 컬럼명
-		$this->mdb->where( 'user_no', $userNo );
+		$this->mdb->where( 'ch_no', $ch_no );
 
 		if( !$this->mdb->update( CHARAC_INFO, $update_data ) )
 		{
@@ -89,10 +93,10 @@ class Model_characters extends MY_Model
 	}
 
 
-	public function delete_user( int $userNo ): bool
+	public function delete_ch( int $chNo ): bool
 	{
 		# 키는 항상 컬럼명
-		$this->mdb->where( 'user_no', $userNo );
+		$this->mdb->where( 'ch_no', $chNo );
 		#whre id = 'userNo'
 
 		if( !$this->mdb->delete( CHARAC_INFO ))
